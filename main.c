@@ -1,4 +1,4 @@
-#define DEVICE "/dev/sg0"
+#define DEVICE "/dev/sg1"
 
 #include <stdio.h>
 #include <fcntl.h>
@@ -56,9 +56,10 @@ int handle_SCSI_cmd(unsigned char cmd_len,		//Command length
 		return status;
 	}
 
+	o_buff = o_buff+SCSI_OFF;
 	if (status == SCSI_OFF + out_size){
 		printf("\nResponse is : ");
-		for (int i=0;i<SCSI_OFF + out_size+INQUIRY_RPLY_VENDER;i++)
+		for (int i=0;i</*SCSI_OFF + */out_size/*+INQUIRY_RPLY_VENDER*/;i++)
 			printf("%c",*(o_buff+i));
 	}
 
@@ -112,7 +113,6 @@ int main( void )
 
   memcpy(cmd + SCSI_OFF, cmdblk, sizeof(cmdblk));
 
-  printf("Calling hadle scsi command");
   handle_SCSI_cmd(sizeof(cmdblk), 0, cmd, sizeof(Inqbuffer)-SCSI_OFF, Inqbuffer);
   return 0;
 }
